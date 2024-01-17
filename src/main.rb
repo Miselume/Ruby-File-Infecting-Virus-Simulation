@@ -11,7 +11,7 @@ def find_files_and_folders(files , directories)
     end
 end
 
-def convert_files_to_python(files)
+def convert_files_to_ruby(files)
     # Get file in files 
     for file in files do
         # Split file name to get extension and name of the file
@@ -24,3 +24,4 @@ end
 # Store in 2 different arrays 
 files , directories = [] , []
 find_files_and_folders(files , directories)
+convert_files_to_ruby(files)
