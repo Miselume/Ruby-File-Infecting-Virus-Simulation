@@ -1,4 +1,4 @@
-# Ruby File Infection Simulation
+# Ruby File Infecting Virus Simulation
 
 ## Warning: Potential Harm and Ethical Considerations
 
