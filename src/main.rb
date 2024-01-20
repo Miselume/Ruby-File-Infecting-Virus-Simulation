@@ -21,7 +21,7 @@ def convert_files_to_ruby(files)
       file_name = file.split('.')
       # Rename the original file (change extension of this file to rb)
       begin
-          if file_name[0] != 'main.rb' or file_name[0] != 'Malware.rb'
+          if file_name[0] != 'main.rb' or file_name[0] != 'malware.rb'
               File.rename(file, file_name[0] + '.rb')  # Use the full file path
           end
       rescue
