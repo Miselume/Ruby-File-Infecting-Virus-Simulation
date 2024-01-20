@@ -1,8 +1,6 @@
 # Find files in given path
 def find_files(files, directories, path = Dir.pwd, max_depth = 10)  
   Dir.foreach(path) do |entry|
-      next if entry == '.' || entry == '..'
-
       full_path = File.join(path, entry)
       if File.directory?(full_path)
           directories << full_path
