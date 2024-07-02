@@ -39,7 +39,7 @@ MIT License
 
 ## Author:
 
-Oguz Kayra Buyukyildirim
+Miselume
 
 ## Disclaimer:
 
